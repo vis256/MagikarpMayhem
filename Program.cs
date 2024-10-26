@@ -1,11 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MagikarpMayhem.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MagikarpMayhemContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("MagikarpMayhemContext") ?? throw new InvalidOperationException("Connection string 'MagikarpMayhemContext' not found.")));
 
-// builder.Services.AddAuthentication();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{   options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+    options.SlidingExpiration = true;
+    options.LoginPath = "/User/Login";
+    options.AccessDeniedPath = "/User/AccessDenied";
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -23,14 +30,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseRouting();
 
-// app.UseAuthorization();
-
 app.MapDefaultControllerRoute();
-
-app.MapControllerRoute(
-    name: "User",
-    pattern: "{controller=User}/{action=Index}/{id?}");
 
 app.Run();
