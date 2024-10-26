@@ -5,6 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MagikarpMayhemContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("MagikarpMayhemContext") ?? throw new InvalidOperationException("Connection string 'MagikarpMayhemContext' not found.")));
 
+// builder.Services.AddAuthentication();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -23,7 +25,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+// app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
 

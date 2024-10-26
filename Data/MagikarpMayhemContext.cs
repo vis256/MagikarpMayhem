@@ -14,6 +14,19 @@ namespace MagikarpMayhem.Data
         {
         }
 
-        public DbSet<MagikarpMayhem.Models.User> User { get; set; } = default!;
+        public DbSet<User> User { get; set; } = default!;
+        public DbSet<PokemonType> PokemonType { get; set; } = default!;
+        
+        public DbSet<Pokemon> Pokemon { get; set; } = default!;
+        
+        public DbSet<Arena> Arenas { get; set; } = default!;
+        
+        public DbSet<Battle> Battles { get; set; } = default!;
+        
+        public DbSet<ArenaMembership> ArenaMemberships { get; set; } = default!;
+        
+        public DbSet<PokemonTypeCounter> PokemonTypeCounters { get; set; } = default!;
+        
+        
     }
 }
