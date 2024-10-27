@@ -4,4 +4,14 @@
 
 <div>
     <h3>@Model.Username</h3>
+    
+    <div>
+        <h4>Is Admin</h4>
+        <p>@Model.IsAdmin</p>
+    </div>
+    
+    <form asp-action="Logout" method="post">
+        <button type="submit">Logout</button>
+    </form>
+        
 </div>
