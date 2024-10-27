@@ -5,41 +5,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-
+using MagikarpMayhem.Services;
 
 namespace MagikarpMayhem.Controllers;
-
-
-public static class PasswordHelper
-{
-    public static string HashPassword(string password, byte[] salt)
-    {
-        return Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            password: password,
-            salt: salt,
-            prf: KeyDerivationPrf.HMACSHA256,
-            iterationCount: 10000,
-            numBytesRequested: 256 / 8));
-    }
-
-    public static byte[] GenerateSalt()
-    {
-        byte[] salt = new byte[128 / 8];
-        using (var rng = RandomNumberGenerator.Create())
-        {
-            rng.GetBytes(salt);
-        }
-        return salt;
-    }
-}
 
 public class UserController : Controller
 {
     private readonly Data.MagikarpMayhemContext _context;
+    private readonly AuthService _authService;
 
-    public UserController(Data.MagikarpMayhemContext context)
+    public UserController(Data.MagikarpMayhemContext context, AuthService authService)
     {
         _context = context;
+        _authService = authService;
     }
     
     // GET /user
@@ -74,32 +52,33 @@ public class UserController : Controller
         return View();
     }
 
-    // POST /User/Login
     [HttpPost]
     public async Task<IActionResult> Login(string username, string password)
     {
-        var user = await _context.User.FirstOrDefaultAsync(u => u.Username == username);
-        if (user == null || user.PasswordHash != PasswordHelper.HashPassword(password, Convert.FromBase64String(user.PasswordSalt)))
+        if (!await _authService.Login(HttpContext, username, password))
         {
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return View();
         }
 
-        var claims = new List<Claim>
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Register(MagikarpMayhem.Models.LoginDTO userData)
+    {
+        if (ModelState.IsValid)
         {
-            new(ClaimTypes.Name, user.Username),
-            new(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
-        };
+            await _authService.Register(userData);
+            return RedirectToAction(nameof(Login));
+        }
+        return View(userData);
+    }
 
-        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var authProperties = new AuthenticationProperties
-        {
-            IsPersistent = true,
-            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
-        };
-
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await _authService.Logout(HttpContext);
         return RedirectToAction("Index", "Home");
     }
 
@@ -109,33 +88,6 @@ public class UserController : Controller
         return View();
     }
     
-    // POST /User/Register
-    [HttpPost]
-    public async Task<IActionResult> Register(MagikarpMayhem.Models.LoginDTO userData)
-    {
-        if (ModelState.IsValid)
-        {
-            var salt = PasswordHelper.GenerateSalt();
-            var user = new Models.User
-            {
-                Username = userData.Username,
-                PasswordHash = PasswordHelper.HashPassword(userData.Password, salt),
-                PasswordSalt = Convert.ToBase64String(salt)
-            };
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Login));
-        }
-        return View(userData);
-    }
-    
-    // POST /User/Logout
-    [HttpPost]
-    public async Task<IActionResult> Logout()
-    {
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return RedirectToAction("Index", "Home");
-    }
     
     // GET User/NotLoggedIn
     public IActionResult NotLoggedIn()

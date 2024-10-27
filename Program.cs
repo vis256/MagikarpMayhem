@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MagikarpMayhem.Data;
+using MagikarpMayhem.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.LoginPath = "/User/Login";
     options.AccessDeniedPath = "/User/AccessDenied";
 });
+
+builder.Services.AddScoped<AuthService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
