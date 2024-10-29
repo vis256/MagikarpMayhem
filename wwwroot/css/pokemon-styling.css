@@ -1,0 +1,39 @@
+:root {
+    --light-blue: #f0f8ff;
+    --yellow: #ffcc00;
+    --blue: #0073e6;
+    --dark-blue: #005bb5;
+    --padding-small: 0.5rem;
+    --padding-medium: 1rem;
+    --padding-large: 2rem;
+}
+
+body {
+    background-color: var(--light-blue);
+    color: var(--dark-blue);
+    padding: var(--padding-medium);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--blue);
+}
+
+button {
+    background-color: var(--yellow);
+    border: none;
+    padding: var(--padding-small);
+    color: var(--dark-blue);
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--blue);
+    color: var(--light-blue);
+}
+
+.container {
+    padding: var(--padding-large);
+    background-color: var(--light-blue);
+    border: 1px solid var(--blue);
+}
+
