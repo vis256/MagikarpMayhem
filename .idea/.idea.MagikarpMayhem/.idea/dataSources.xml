@@ -11,5 +11,12 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="MagikarpMayhemContext-f6b40c94-1da1-4366-ae4e-c7341e2864e9 [2]" uuid="376ced1a-2fd6-4e46-8448-5ce6a3918a81">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/MagikarpMayhemContext-f6b40c94-1da1-4366-ae4e-c7341e2864e9.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

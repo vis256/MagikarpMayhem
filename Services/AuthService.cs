@@ -52,14 +52,15 @@ public class AuthService
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, user.Username),
-            new(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
+            new(ClaimTypes.Role, user.Role.ToString())
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var authProperties = new AuthenticationProperties
         {
             IsPersistent = true,
-            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
+            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60),
+            RedirectUri = "/User/Profile"
         };
 
         await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
@@ -73,7 +74,8 @@ public class AuthService
         {
             Username = userData.Username,
             PasswordHash = PasswordHelper.HashPassword(userData.Password, salt),
-            PasswordSalt = Convert.ToBase64String(salt)
+            PasswordSalt = Convert.ToBase64String(salt),
+            Role = UserRole.User
         };
         _context.Add(user);
         await _context.SaveChangesAsync();

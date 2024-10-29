@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MagikarpMayhem.Data;
 using MagikarpMayhem.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MagikarpMayhemContext>(options =>
@@ -14,6 +15,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.LoginPath = "/User/Login";
     options.AccessDeniedPath = "/User/AccessDenied";
 });
+
+
 
 builder.Services.AddScoped<AuthService>();
 
@@ -34,9 +37,10 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseAuthentication();
-app.UseAuthorization();
 
 app.UseRouting();
+
+app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
 
