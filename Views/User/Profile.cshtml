@@ -1,17 +1,28 @@
 ﻿@model MagikarpMayhem.Models.User
 
+@{
+    ViewData["Title"] = "User Profile";
+}
+
 <h2>User Profile</h2>
 
-<div>
-    <h3>@Model.Username</h3>
-    
-    <div>
-        <h4>Role</h4>
-        <p>@Model.Role</p>
+<div class="profile-container">
+    <div class="profile-header">
+        <img src="~/static/trainer-image.png" alt="Trainer avatar" style="width: 100px; height: 100px;" />
+        <h3>@Model.Username</h3>
+        <p>@Enum.GetName(typeof(UserRole), Model.Role)</p>
     </div>
-    
-    <form asp-action="Logout" method="post">
-        <button type="submit">Logout</button>
-    </form>
-        
 </div>
+
+<style>
+    .profile-container {
+        padding: 1rem;
+        border-radius: 8px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .profile-header {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+</style>

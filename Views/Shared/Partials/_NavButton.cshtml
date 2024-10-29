@@ -1,0 +1,5 @@
+@model MagikarpMayhem.Models.NavButtonModel
+
+<form asp-controller="@Model.Controller" asp-action="@Model.Action" method="@Model.Method" style="display:inline;">
+    <button type="submit">@Model.ButtonText</button>
+</form>

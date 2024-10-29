@@ -20,4 +20,8 @@
       <None Include="wwwroot\static\logo.png" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\static\fonts\" />
+    </ItemGroup>
+
 </Project>

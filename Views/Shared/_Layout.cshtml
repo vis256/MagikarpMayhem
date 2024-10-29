@@ -6,16 +6,15 @@
     <title>@ViewData["Title"] - MagikarpMayhem</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/css-pokemon-gameboy.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/css/pokemon-styling.css" asp-append-version="true"/>
 </head>
 <body>
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                <img src="~/static/logo.png" alt="Logo" style="height: 40px;"/>
-                MagikarpMayhem
-            </a>
+            <partial name="Partials/_Logo" />
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -23,7 +22,7 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="">Users</a>
+                        <partial name="Partials/_NavButton" model='new NavButtonModel { Controller = "User", Action = "Index", Method = "get", ButtonText = "Users" }'/>
                     </li>
                 </ul>
 
@@ -31,18 +30,16 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="User" asp-action="Profile">Profile</a>
+                            <partial name="Partials/_NavButton" model='new NavButtonModel { Controller = "User", Action = "Profile", Method = "get", ButtonText = "Profile" }'/>
                         </li>
-                        <li>
-                            <form class="nav-item" asp-controller="User" asp-action="Logout" method="post" style="display:inline;">
-                                <button type="submit" class="nav-link text-dark">Logout</button>
-                            </form>
+                        <li class="nav-item">
+                            <partial name="Partials/_NavButton" model='new NavButtonModel { Controller = "User", Action = "Logout", Method = "post", ButtonText = "Logout" }'/>
                         </li>
                     }
                     else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="User" asp-action="Login">Login</a>
+                                <partial name="Partials/_NavButton" model='new NavButtonModel { Controller = "User", Action = "Login", Method = "get", ButtonText = "Login" }'/>
                             </li>
                         }
                 </ul>
@@ -51,7 +48,7 @@
     </nav>
 </header>
 <div class="container">
-    <main role="main" class="pb-3">
+    <main role="main" class="pb-2 framed">
         @RenderBody()
     </main>
 </div>
