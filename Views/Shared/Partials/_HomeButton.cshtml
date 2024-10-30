@@ -1,0 +1,12 @@
+@model MagikarpMayhem.Models.NavButtonModel
+
+<form asp-controller="@Model.Controller" asp-action="@Model.Action" method="@Model.Method" style="display:inline;">
+    <button class="home-nav-button" style="background-color: @Model.BackgroundColor" type="submit">
+        <div class="emoji">
+            @Model.Emoji
+        </div>
+        <div class="text">
+            @Model.ButtonText
+        </div>
+    </button>
+</form>

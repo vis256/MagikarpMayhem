@@ -1,0 +1,15 @@
+@model IEnumerable<MagikarpMayhem.Models.PokedexInfo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Pokedex Index</h1>
+
+<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+    @foreach (var entry in Model)
+    {
+    <partial name="Partials/_PokedexEntry" model="entry"/>
+    }
+</div>
+

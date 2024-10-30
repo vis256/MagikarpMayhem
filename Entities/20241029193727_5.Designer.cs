@@ -3,6 +3,7 @@ using System;
 using MagikarpMayhem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagikarpMayhem.Entities
 {
     [DbContext(typeof(MagikarpMayhemContext))]
-    partial class MagikarpMayhemContextModelSnapshot : ModelSnapshot
+    [Migration("20241029193727_5")]
+    partial class _5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -84,28 +87,6 @@ namespace MagikarpMayhem.Entities
                     b.ToTable("Battles");
                 });
 
-            modelBuilder.Entity("MagikarpMayhem.Models.PokedexInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("FirstType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("SecondType")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PokedexInfo");
-                });
-
             modelBuilder.Entity("MagikarpMayhem.Models.Pokemon", b =>
                 {
                     b.Property<int>("Id")
@@ -132,8 +113,9 @@ namespace MagikarpMayhem.Entities
 
             modelBuilder.Entity("MagikarpMayhem.Models.PokemonType", b =>
                 {
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Color")
                         .IsRequired()
@@ -143,7 +125,11 @@ namespace MagikarpMayhem.Entities
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
 
                     b.ToTable("PokemonType");
                 });

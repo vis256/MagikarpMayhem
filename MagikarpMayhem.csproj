@@ -24,4 +24,8 @@
       <Folder Include="wwwroot\static\fonts\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\pokemonType\Index.cshtml" />
+    </ItemGroup>
+
 </Project>

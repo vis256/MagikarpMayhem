@@ -1,0 +1,13 @@
+@model PokedexInfo
+
+<div class="pokedex-entry">
+    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/pokemon/@(Model.Id).png" alt="@Model.Name"/>
+    <h1 class="name">@Model.Name</h1>
+    <div class="types">
+        <partial name="Partials/_PokemonType" model="@Model.FirstType"/>
+        @if(Model.SecondType != null)
+        {
+            <partial name="Partials/_PokemonType" model="@Model.SecondType"/>
+        }
+    </div>
+</div>

@@ -1,8 +1,41 @@
-﻿@{
+﻿@using MagikarpMayhem.Services
+@inject UserService UserService
+@{
     ViewData["Title"] = "Home Page";
+    var user = UserService.GetCurrentUser();
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @if(user != null)
+    {
+        <h2>Welcome, @user.Username!</h2>
+        
+        <div class="home-statistics framed danger">
+            <img src="static/trainer-image.png" alt="Trainer image" style="width: 160px; height: 160px; margin-bottom: 1rem;">
+            <div>Arena: Kanto Arena</div>
+            <div>Current season record: 9-8</div>
+            <div>Winrate: 56%</div>
+        </div>
+        
+        <div class="home-navigation">
+            <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Pokédex", Controller = "Pokedex", Action = "Index", Method = "get",  BackgroundColor = "#FFA07A", Emoji = "🐾" }' />
+        </div>
+        }
+        else
+        {
+            <h2>Welcome, Trainer!</h2>
+        
+            <p>Sign in to access your profile and manage your Pokémon!</p>
+        }
 </div>
+
+<style>
+    .home-navigation {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1rem;
+        gap: .5rem;
+    }
+</style>

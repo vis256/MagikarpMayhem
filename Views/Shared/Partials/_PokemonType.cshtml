@@ -1,0 +1,25 @@
+@using MagikarpMayhem.Services
+@model string
+
+@inject IPokemonTypeService PokemonTypeService
+
+@{
+var pokemonType = PokemonTypeService.GetPokemonTypeByName(Model);
+}
+
+@if (pokemonType != null)
+{
+    <div class="pokemon-type" style="background-color: @pokemonType.Color; color: white">
+        <div> @pokemonType.Emoji </div>
+        <div>
+            @pokemonType.Name
+        </div>
+    </div>
+}
+else
+{
+    <div class="pokemon-type" style="background-color: #333; color: white">
+        <div>🕳️</div>
+        <div>@Model</div>
+    </div>
+}

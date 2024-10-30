@@ -16,7 +16,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     options.AccessDeniedPath = "/User/AccessDenied";
 });
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IPokemonTypeService, PokemonTypeService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

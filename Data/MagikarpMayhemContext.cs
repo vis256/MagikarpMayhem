@@ -18,6 +18,7 @@ namespace MagikarpMayhem.Data
         public DbSet<PokemonType> PokemonType { get; set; } = default!;
         
         public DbSet<Pokemon> Pokemon { get; set; } = default!;
+        public DbSet<PokedexInfo> PokedexInfo { get; set; } = default!;
         
         public DbSet<Arena> Arenas { get; set; } = default!;
         
