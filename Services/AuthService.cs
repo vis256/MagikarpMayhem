@@ -151,6 +151,8 @@ public class AuthService
         var salt = PasswordHelper.GenerateSalt();
         user.PasswordHash = PasswordHelper.HashPassword(newPassword, salt);
         user.PasswordSalt = Convert.ToBase64String(salt);
+        
+        _context.PasswordResetTokens.Remove(await _context.PasswordResetTokens.FirstOrDefaultAsync(t => t.UserId == userId && t.Token == token));
 
         await _context.SaveChangesAsync();
     }
