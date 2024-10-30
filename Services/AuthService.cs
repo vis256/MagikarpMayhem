@@ -86,4 +86,61 @@ public class AuthService
     {
         await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     }
+    
+    public async Task SendPasswordResetEmail(User user)
+    {
+        var resetToken = GeneratePasswordResetToken(user);
+        var resetLink = $"http://localhost:5286/User/ResetPassword?userId={user.Id}&token={resetToken}";
+
+        Console.WriteLine($"Password reset link: {resetLink}");
+        
+        // Store the token in the database
+        await StorePasswordResetToken(user, resetToken);
+    }
+
+    private string GeneratePasswordResetToken(User user)
+    {
+        return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+    }
+
+    private async Task StorePasswordResetToken(User user, string token)
+    {
+        var passwordResetToken = new PasswordResetToken
+        {
+            UserId = user.Id,
+            Token = token,
+            Expiration = DateTime.UtcNow.AddHours(24) // Token valid for 1 hour
+        };
+
+        _context.PasswordResetTokens.Add(passwordResetToken);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<bool> ValidatePasswordResetToken(int userId, string token)
+    {
+        var passwordResetToken = await _context.PasswordResetTokens
+            .FirstOrDefaultAsync(t => t.UserId == userId && t.Token == token && t.Expiration > DateTime.UtcNow);
+
+        return passwordResetToken != null;
+    }
+    
+    public async Task ResetPassword(int userId, string token, string newPassword)
+    {
+        var user = await _context.User.FindAsync(userId);
+        if (user == null)
+        {
+            throw new Exception("User not found");
+        }
+
+        if (!await ValidatePasswordResetToken(userId, token))
+        {
+            throw new Exception("Invalid or expired token");
+        }
+
+        var salt = PasswordHelper.GenerateSalt();
+        user.PasswordHash = PasswordHelper.HashPassword(newPassword, salt);
+        user.PasswordSalt = Convert.ToBase64String(salt);
+
+        await _context.SaveChangesAsync();
+    }
 }

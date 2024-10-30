@@ -28,6 +28,7 @@ namespace MagikarpMayhem.Data
         
         public DbSet<PokemonTypeCounter> PokemonTypeCounters { get; set; } = default!;
         
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; } = default!;
         
     }
 }

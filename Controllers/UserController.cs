@@ -152,4 +152,57 @@ public class UserController : Controller
         }
         return RedirectToAction(nameof(Index));
     }
+    
+    // GET /User/ForgotPassword
+    [NotLoggedIn]
+    public IActionResult ForgotPassword()
+    {
+        return View();
+    }
+    
+    // POST /User/ForgotPassword
+    [HttpPost]
+    [NotLoggedIn]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+    {
+        var user = await _context.User.FirstOrDefaultAsync(u => u.Username == model.Username);        if (user == null)
+        {
+            ModelState.AddModelError(string.Empty, "Username not found.");
+            return View();
+        }
+
+        // Generate password reset token and send email (implementation depends on your email service)
+        await _authService.SendPasswordResetEmail(user);
+
+        return RedirectToAction(nameof(Login));
+    }
+    
+    // GET /User/ResetPassword/{userId}/{token}
+    [NotLoggedIn]
+    public async Task<IActionResult> ResetPassword(int userId, string token)
+    {
+        if (!await _authService.ValidatePasswordResetToken(userId, token))
+        {
+            return RedirectToAction("NotLoggedIn");
+        }
+        
+        return View();
+    }
+    
+    // POST /User/ResetPassword/{userId}/{token}
+    [HttpPost]
+    [NotLoggedIn]
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)    {
+        if (!await _authService.ValidatePasswordResetToken(model.UserId, model.Token))        {
+            return RedirectToAction("NotLoggedIn");
+        }
+        
+        if (model.Password != model.ConfirmPassword)        {
+            ModelState.AddModelError(string.Empty, "Passwords do not match.");
+            return View();
+        }
+        
+        await _authService.ResetPassword(model.UserId, model.Token, model.Password);        
+        return RedirectToAction(nameof(Login));
+    }
 }
