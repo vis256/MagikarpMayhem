@@ -2,7 +2,7 @@
 
 <h2>Edit User</h2>
 
-<form asp-action="Edit">
+<form asp-action="Edit" class="pb-4">
     <div class="form-group">
         <label asp-for="Username" class="control-label"></label>
         <input asp-for="Username" class="form-control" />
@@ -24,6 +24,6 @@
     </div>
 </form>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="button-list">
+    <partial name="Partials/_NavButton" model='new NavButtonModel { ButtonText = "Back to list", Controller = "User", Action = "Index", Method = "get"}'/>
 </div>

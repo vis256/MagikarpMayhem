@@ -19,6 +19,11 @@
         
         <div class="home-navigation">
             <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Pokédex", Controller = "Pokedex", Action = "Index", Method = "get",  BackgroundColor = "#FFA07A", Emoji = "🐾" }' />
+            
+            @if (user.Role == UserRole.Admin)
+            {
+                <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Users", Controller = "User", Action = "Index", Method = "get",  BackgroundColor = "#aeaeae", Emoji = "👤" }' />
+            }
         </div>
         }
         else

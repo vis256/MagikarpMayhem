@@ -9,6 +9,10 @@
     gap: .5rem;
 }
 
+.container main {
+    padding-bottom: 2rem !important;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -91,4 +95,10 @@ header {
 
 .home-nav-button:hover:before {
     content: none !important;
+}
+
+.button-list {
+    display: flex; 
+    flex-direction: column; 
+    gap: .5rem;
 }

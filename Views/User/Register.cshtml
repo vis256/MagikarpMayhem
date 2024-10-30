@@ -6,7 +6,7 @@
 
 <h2>Register</h2>
 
-<form asp-action="Register" method="post">
+<form asp-action="Register" method="post" class="pb-4">
     <div class="form-group">
         <label asp-for="Username" class="control-label"></label>
         <input asp-for="Username" class="form-control" />
@@ -22,6 +22,6 @@
     </div>
 </form>
 
-<div>
-    <a asp-action="Login">Already have an account? Login</a>
+<div class="button-list">
+    <partial name="Partials/_NavButton" model='new NavButtonModel { ButtonText = "Already have an account? Login", Controller = "User", Action = "Login", Method = "get"}'/>
 </div>

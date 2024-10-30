@@ -77,7 +77,10 @@ public class UserController : Controller
     {
         if (ModelState.IsValid)
         {
-            await _authService.Register(userData);
+            if (!await _authService.Register(userData))
+            {
+                return View(userData);
+            }
             return RedirectToAction(nameof(Login));
         }
         return View(userData);
@@ -102,6 +105,13 @@ public class UserController : Controller
     // GET User/NotLoggedIn
     [NotLoggedIn]
     public IActionResult NotLoggedIn()
+    {
+        return View();
+    }
+    
+    // GET User/AccessDenied
+    [AllowAnonymous]
+    public IActionResult AccessDenied()
     {
         return View();
     }

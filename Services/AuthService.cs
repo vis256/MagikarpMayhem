@@ -68,7 +68,7 @@ public class AuthService
         return true;
     }
 
-    public async Task Register(LoginDTO userData)
+    public async Task<bool> Register(LoginDTO userData)
     {
         var salt = PasswordHelper.GenerateSalt();
         var user = new User
@@ -78,8 +78,19 @@ public class AuthService
             PasswordSalt = Convert.ToBase64String(salt),
             Role = UserRole.User
         };
-        _context.Add(user);
-        await _context.SaveChangesAsync();
+        
+        try
+        {
+            _context.Add(user);
+            await _context.SaveChangesAsync();
+        } 
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
+        
+        return true;
     }
 
     public async Task Logout(HttpContext httpContext)
