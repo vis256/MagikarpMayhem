@@ -19,6 +19,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ArenaService>();
 builder.Services.AddScoped<IPokemonTypeService, PokemonTypeService>();
 
 // Add services to the container.

@@ -102,3 +102,12 @@ header {
     flex-direction: column; 
     gap: .5rem;
 }
+
+.arena-record {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1rem;
+    gap: .5rem;
+}

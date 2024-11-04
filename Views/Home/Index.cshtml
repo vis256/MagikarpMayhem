@@ -6,41 +6,36 @@
 }
 
 <div class="text-center">
-    @if(user != null)
+    @if (user != null)
     {
         <h2>Welcome, @user.Username!</h2>
-        
         <div class="home-statistics framed danger">
             <img src="static/trainer-image.png" alt="Trainer image" style="width: 160px; height: 160px; margin-bottom: 1rem;">
             <div>Arena: Kanto Arena</div>
             <div>Current season record: 9-8</div>
             <div>Winrate: 56%</div>
         </div>
-        
         <div class="home-navigation">
-            <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Pokédex", Controller = "Pokedex", Action = "Index", Method = "get",  BackgroundColor = "#FFA07A", Emoji = "🐾" }' />
-            
+            <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Pokédex", Controller = "Pokedex", Action = "Index", Method = "get", BackgroundColor = "#FFA07A", Emoji = "🐾" }'/>
+            <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Arenas", Controller = "Arena", Action = "Index", Method = "get", BackgroundColor = "#FFA07A", Emoji = "🏟️" }'/>
+
             @if (user.Role == UserRole.Admin)
             {
-                <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Users", Controller = "User", Action = "Index", Method = "get",  BackgroundColor = "#aeaeae", Emoji = "👤" }' />
+                <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Users", Controller = "User", Action = "Index", Method = "get", BackgroundColor = "#aeaeae", Emoji = "👤" }'/>
             }
         </div>
-        }
-        else
-        {
-            <h2>Welcome, Trainer!</h2>
-        
-            <p>Sign in to access your profile and manage your Pokémon!</p>
-        }
+    }
+    else
+    {
+        <h2>Welcome, Trainer!</h2>
+        <p>Sign in to access your profile and manage your Pokémon!</p>
+    }
 </div>
 
 <style>
     .home-navigation {
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
         justify-content: center;
-        margin-top: 1rem;
-        gap: .5rem;
+        margin-top: 2rem;
     }
 </style>
