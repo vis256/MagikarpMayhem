@@ -3,6 +3,7 @@ using System;
 using MagikarpMayhem.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagikarpMayhem.Entities
 {
     [DbContext(typeof(MagikarpMayhemContext))]
-    partial class MagikarpMayhemContextModelSnapshot : ModelSnapshot
+    [Migration("20241105091024_15")]
+    partial class _15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -35,6 +38,29 @@ namespace MagikarpMayhem.Entities
                     b.ToTable("Arenas");
                 });
 
+            modelBuilder.Entity("MagikarpMayhem.Models.ArenaBattleRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ArenaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Losses")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Wins")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ArenaBattleRecords");
+                });
+
             modelBuilder.Entity("MagikarpMayhem.Models.ArenaMembership", b =>
                 {
                     b.Property<int>("Id")
@@ -50,6 +76,38 @@ namespace MagikarpMayhem.Entities
                     b.HasKey("Id");
 
                     b.ToTable("ArenaMemberships");
+                });
+
+            modelBuilder.Entity("MagikarpMayhem.Models.Battle", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ArenaId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AttackerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AttackerPokemonId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DefenderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DefenderPokemonId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WinnerId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Battles");
                 });
 
             modelBuilder.Entity("MagikarpMayhem.Models.PasswordResetToken", b =>
@@ -137,15 +195,26 @@ namespace MagikarpMayhem.Entities
                     b.ToTable("PokemonType");
                 });
 
-            modelBuilder.Entity("MagikarpMayhem.Models.User", b =>
+            modelBuilder.Entity("MagikarpMayhem.Models.PokemonTypeCounter", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("DisplayName")
+                    b.Property<string>("Counters")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PokemonTypeCounters");
+                });
+
+            modelBuilder.Entity("MagikarpMayhem.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()

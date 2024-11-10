@@ -1,0 +1,16 @@
+@model MagikarpMayhem.Models.Arena
+
+@inject MagikarpMayhem.Services.ArenaService ArenaService
+
+@{
+    ViewData["Title"] = "Arena Details";
+}
+
+<h1>@Model.Name</h1>
+
+<div class="button-list">
+    <form asp-action="Leave" asp-route-id="@Model.Id" method="post">
+        <button type="submit">Leave Arena</button>
+    </form>
+</div>
+

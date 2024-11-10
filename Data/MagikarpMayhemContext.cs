@@ -22,12 +22,7 @@ namespace MagikarpMayhem.Data
         
         public DbSet<Arena> Arenas { get; set; } = default!;
         
-        public DbSet<Battle> Battles { get; set; } = default!;
-        
-        public DbSet<ArenaBattleRecord> ArenaBattleRecords { get; set; } = default!;
         public DbSet<ArenaMembership> ArenaMemberships { get; set; } = default!;
-        
-        public DbSet<PokemonTypeCounter> PokemonTypeCounters { get; set; } = default!;
         
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; } = default!;
         

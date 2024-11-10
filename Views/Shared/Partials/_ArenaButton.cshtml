@@ -1,0 +1,37 @@
+@using System.Security.Claims
+@model MagikarpMayhem.Models.ArenaButtonModel
+
+@inject MagikarpMayhem.Services.ArenaService ArenaService
+
+@{
+    var userId = User.Identity.IsAuthenticated ? int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) : (int?)null;
+    if (userId == null)
+    {
+        throw new Exception("User is not authenticated");
+    }
+
+    var arenaMembership = await ArenaService.GetArenaOfUser(userId.Value);
+    bool isMember = arenaMembership?.ArenaId == Model.ArenaId;
+    bool isMemberOfAnyArena = arenaMembership != null;
+    bool showJoinButton = !isMember && !isMemberOfAnyArena;
+    Console.WriteLine($"arena: {Model.ArenaName} isMember: {isMember}, isMemberOfAnyArena: {isMemberOfAnyArena}, showJoinButton: {showJoinButton}");
+}
+
+
+<form asp-controller="Arena" asp-action="View" asp-route-id="@Model.ArenaId" method="get" style="display:inline; position:relative;">
+    <button class="home-nav-button @(@isMember ? "" : "disabled")" style="background-color: @Model.BackgroundColor" type="submit" disabled="@(!isMember)">
+        <div class="emoji">
+            🏟️
+        </div>
+        <div class="text" style="font-size: .75rem">
+            @Model.ArenaName
+        </div>
+    </button>
+</form>
+
+@if (showJoinButton)
+{
+    <form asp-controller="Arena" asp-action="Join" asp-route-id="@Model.ArenaId" method="post" style="display:inline;">
+        <button class="home-nav-bottom-button" type="submit">Join</button>
+    </form>
+}

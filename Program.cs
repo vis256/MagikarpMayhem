@@ -20,6 +20,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ArenaService>();
+builder.Services.AddScoped<PokemonService>();
+builder.Services.AddScoped<PokedexService>();
 builder.Services.AddScoped<IPokemonTypeService, PokemonTypeService>();
 
 // Add services to the container.

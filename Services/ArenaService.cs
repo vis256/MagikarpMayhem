@@ -31,10 +31,7 @@ public class ArenaService
 
         var membership = new ArenaMembership { UserId = userId, ArenaId = arenaId };
         _context.ArenaMemberships.Add(membership);
-        var battleRecord = new ArenaBattleRecord { UserId = userId, ArenaId = arenaId, Wins = 0, Losses = 0 };
-        _context.ArenaBattleRecords.Add(battleRecord);
         await _context.SaveChangesAsync();
-        await UpdateArenaLeader(arenaId);
         return true;
     }
 
@@ -48,7 +45,6 @@ public class ArenaService
 
         _context.ArenaMemberships.Remove(membership);
         await _context.SaveChangesAsync();
-        await UpdateArenaLeader(arenaId);
         return true;
     }
 
@@ -68,30 +64,14 @@ public class ArenaService
         return await _context.ArenaMemberships.FirstOrDefaultAsync(am => am.UserId == userId);
     }
 
-    public async Task<ArenaBattleRecord?> GetArenaBattleRecordOfUser(int userId, int arenaId)
+    public async Task<List<User>> GetUsersOfArena(int arenaId)
     {
-        return await _context.ArenaBattleRecords.FirstOrDefaultAsync(abr =>
-            abr.UserId == userId && abr.ArenaId == arenaId);
+        return _context.ArenaMemberships.Where(am => am.ArenaId == arenaId).Select(am => am.UserId)
+            .Join(_context.User, userId => userId, user => user.Id, (userId, user) => user).ToList();
     }
 
-    public async Task<List<int>> GetUsersOfArena(int arenaId)
+    public async Task<bool> IsMemberOfArena(int userId, int arenaId)
     {
-        return await _context.ArenaMemberships.Where(am => am.ArenaId == arenaId).Select(am => am.UserId).ToListAsync();
-    }
-
-    private async Task UpdateArenaLeader(int arenaId)
-    {
-        // Implementation for updating the arena leader
-        var leader = _context.ArenaBattleRecords.Where(abr => abr.ArenaId == arenaId).OrderByDescending(abr => abr.Wins)
-            .Select(abr => abr.UserId).FirstOrDefault();
-        if (leader != 0)
-        {
-            var arena = await _context.Arenas.FindAsync(arenaId);
-            if (arena != null)
-            {
-                arena.LeaderId = leader;
-                await _context.SaveChangesAsync();
-            }
-        }
+        return await _context.ArenaMemberships.AnyAsync(am => am.UserId == userId && am.ArenaId == arenaId);
     }
 }

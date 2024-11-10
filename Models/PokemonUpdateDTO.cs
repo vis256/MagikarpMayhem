@@ -1,10 +1,8 @@
-using System.Runtime.CompilerServices;
-
 namespace MagikarpMayhem.Models;
 
-public class Arena
+public class PokemonUpdateDTO
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    public int? LeaderId { get; set; }
+    public int Level { get; set; }
 }

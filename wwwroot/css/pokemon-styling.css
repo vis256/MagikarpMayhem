@@ -67,6 +67,11 @@ header {
     margin-bottom: 0 !important;
 }
 
+.pokedex-entry .level {
+    font-size: .75rem;
+    margin-bottom: 0 !important;
+}
+
 .pokedex-entry .types {
     display: flex;
     flex-direction: column;
@@ -83,6 +88,7 @@ header {
     padding: 1rem;
     height: 10rem;
     width: 10rem;
+    font-size: .8rem;
 }
 
 .home-nav-button .emoji {
@@ -90,10 +96,29 @@ header {
 }
 
 .home-nav-button:hover {
-    opacity: .9;
+    opacity: .8;
 }
 
 .home-nav-button:hover:before {
+    content: none !important;
+}
+
+.home-nav-button.disabled {
+    opacity: .8 !important;
+}
+
+.home-nav-bottom-button {
+    width: 10rem;
+    height: 2rem;
+    line-height: 2.5rem;
+    background-color: #99ed77;
+}
+
+.home-nav-bottom-button:hover {
+    opacity: .8;
+}
+
+.home-nav-bottom-button:hover:before {
     content: none !important;
 }
 

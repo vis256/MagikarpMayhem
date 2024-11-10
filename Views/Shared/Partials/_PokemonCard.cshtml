@@ -1,0 +1,34 @@
+@using System.Security.Claims
+@using MagikarpMayhem.Services
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Pokemon
+
+@inject PokedexService PokedexService
+
+@{
+    var pokedexInfo = PokedexService.GetPokedexInfo(Model.PokedexNumber);
+    var userId = User.Identity.IsAuthenticated ? int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) : (int?)null;
+    var ownedByUser = userId.HasValue && Model.OwnerId == userId;
+}
+
+@if (pokedexInfo != null)
+{
+    <div class="pokedex-entry">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/pokemon/@(Model.PokedexNumber).png" alt="@Model.Name"/>
+        <h1 class="name">@Model.Name</h1>
+        <h2 class="level">Lvl. @Model.Level</h2>
+        <div class="types">
+            <partial name="Partials/_PokemonType" model="pokedexInfo.FirstType"/>
+            @if (pokedexInfo.SecondType != null)
+            {
+                <partial name="Partials/_PokemonType" model="pokedexInfo.SecondType"/>
+            }
+        </div>
+    </div>
+}
+@if (ownedByUser)
+{
+    <form method="post" asp-controller="Pokemon" asp-action="Delete" asp-route-id="@Model.Id">
+        <button type="submit" class="release-button">Release</button>
+    </form>
+}

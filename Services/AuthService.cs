@@ -68,7 +68,7 @@ public class AuthService
         return true;
     }
 
-    public async Task<bool> Register(LoginDTO userData)
+    public async Task<bool> Register(RegisterDTO userData)
     {
         var salt = PasswordHelper.GenerateSalt();
         var user = new User
@@ -76,7 +76,8 @@ public class AuthService
             Username = userData.Username,
             PasswordHash = PasswordHelper.HashPassword(userData.Password, salt),
             PasswordSalt = Convert.ToBase64String(salt),
-            Role = UserRole.User
+            Role = UserRole.User,
+            DisplayName = userData.DisplayName
         };
         
         try
@@ -111,7 +112,7 @@ public class AuthService
 
     private string GeneratePasswordResetToken(User user)
     {
-        return Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+        return Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Replace(" ", "X");
     }
 
     private async Task StorePasswordResetToken(User user, string token)

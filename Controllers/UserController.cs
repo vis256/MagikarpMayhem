@@ -24,7 +24,7 @@ public class UserController : Controller
     }
     
     // GET /User/Index
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Professor")]
     public IActionResult Index()
     {
         var users = _context.User.ToList();
@@ -73,7 +73,7 @@ public class UserController : Controller
 
     [HttpPost]
     [NotLoggedIn]
-    public async Task<IActionResult> Register(MagikarpMayhem.Models.LoginDTO userData)
+    public async Task<IActionResult> Register(MagikarpMayhem.Models.RegisterDTO userData)
     {
         if (ModelState.IsValid)
         {
@@ -117,7 +117,7 @@ public class UserController : Controller
     }
     
     // GET /User/Edit/{id}
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Professor")]
     public IActionResult Edit(int id)
     {
         var user = _context.User.Find(id);
@@ -130,7 +130,7 @@ public class UserController : Controller
 
     // POST /User/Edit/{id}
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Professor")]
     public async Task<IActionResult> Edit(int id, User updatedUser)
     {
         if (id != updatedUser.Id)

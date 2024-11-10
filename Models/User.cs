@@ -8,6 +8,9 @@ public class User
 {
     [Key]
     public int Id { get; set; }
+
+    [Microsoft.Build.Framework.Required]
+    public string DisplayName { get; set; }
     
     [Microsoft.Build.Framework.Required]
     public string Username { get; set; }

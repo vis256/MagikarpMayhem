@@ -8,18 +8,18 @@
 <div class="text-center">
     @if (user != null)
     {
-        <h2>Welcome, @user.Username!</h2>
-        <div class="home-statistics framed danger">
-            <img src="static/trainer-image.png" alt="Trainer image" style="width: 160px; height: 160px; margin-bottom: 1rem;">
-            <div>Arena: Kanto Arena</div>
-            <div>Current season record: 9-8</div>
-            <div>Winrate: 56%</div>
+        <h2>Welcome, @user.DisplayName!</h2>
+        
+        <div class="home-navigation-header">
+            <p>What would you like to do today?</p>
         </div>
+        
         <div class="home-navigation">
             <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Pokédex", Controller = "Pokedex", Action = "Index", Method = "get", BackgroundColor = "#FFA07A", Emoji = "🐾" }'/>
+            <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "My Pokémon", Controller = "Pokemon", Action = "Index", Method = "get", BackgroundColor = "#FFA07A", Emoji = "🏟️" }'/>
             <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Arenas", Controller = "Arena", Action = "Index", Method = "get", BackgroundColor = "#FFA07A", Emoji = "🏟️" }'/>
 
-            @if (user.Role == UserRole.Admin)
+            @if (user.Role == UserRole.Professor)
             {
                 <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Users", Controller = "User", Action = "Index", Method = "get", BackgroundColor = "#aeaeae", Emoji = "👤" }'/>
             }
@@ -29,13 +29,26 @@
     {
         <h2>Welcome, Trainer!</h2>
         <p>Sign in to access your profile and manage your Pokémon!</p>
+        
+        <div class="home-navigation-header">
+            <p>What would you like to do today?</p>
+        </div>
+        
+        <div class="home-navigation">
+            <partial name="Partials/_HomeButton" model='new NavButtonModel { ButtonText = "Pokédex", Controller = "Pokedex", Action = "Index", Method = "get", BackgroundColor = "#FFA07A", Emoji = "🐾" }'/>
+        </div>
     }
 </div>
 
 <style>
+    .home-navigation-header {
+        margin-top: 4rem;
+    }
+    
     .home-navigation {
         display: flex;
         justify-content: center;
         margin-top: 2rem;
     }
+
 </style>

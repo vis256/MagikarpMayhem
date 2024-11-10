@@ -1,0 +1,20 @@
+@model IEnumerable<MagikarpMayhem.Models.Pokemon>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>My Pokémon</h1>
+
+<div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+    @foreach (var pokemon in Model)
+    {
+        <div>
+            <partial name="Partials/_PokemonCard" model="pokemon"/>
+        </div>
+    }
+</div>
+
+<div class="button-list">
+    <partial name="Partials/_NavButton" model='new NavButtonModel { ButtonText = "Add a new Pokémon", Controller = "Pokemon", Action = "Create", Method = "get"}'/>
+</div>

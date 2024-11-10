@@ -1,0 +1,31 @@
+@using MagikarpMayhem.Services
+@model int
+
+@inject PokemonService PokemonService
+@inject UserService UserService
+
+@{
+    ViewData["Title"] = "Index";
+    var user = UserService.GetUserById(Model);
+    var pokemons = PokemonService.GetUserPokemons(Model);
+}
+
+@if (user != null)
+{
+    <h1>@user.DisplayName's Pokémons</h1>
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+        @for (int i = 0; i < pokemons.Count(); i++)
+        {
+            var pokemon = pokemons.ElementAt(i);
+            <div>
+                <partial name="Partials/_PokemonCard" model="pokemon"/>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h1>User not found</h1>
+}
+
+

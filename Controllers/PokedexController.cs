@@ -1,3 +1,4 @@
+using MagikarpMayhem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -5,17 +6,17 @@ namespace MagikarpMayhem.Controllers;
 
 public class PokedexController : Controller
 {
-    private readonly Data.MagikarpMayhemContext _context;
+    private readonly PokedexService PokedexService;
 
-    public PokedexController(Data.MagikarpMayhemContext context)
+    public PokedexController(PokedexService pokedexService)
     {
-        _context = context;
+        PokedexService = pokedexService;
     }
     // GET
     [Authorize]
     public IActionResult Index()
     {
-        var pokedexEntries = _context.PokedexInfo.ToList();
+        var pokedexEntries = PokedexService.GetAllPokedexInfos();
         return View(pokedexEntries);
     }
 }

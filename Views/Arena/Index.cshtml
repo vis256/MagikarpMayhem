@@ -1,4 +1,5 @@
 @using System.Security.Claims
+@using MagikarpMayhem.Utils
 
 @inject MagikarpMayhem.Services.ArenaService ArenaService
 
@@ -6,22 +7,23 @@
     var userId = User.Identity.IsAuthenticated ? int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) : (int?)null;
     var userArenaMembership = userId.HasValue ? await ArenaService.GetArenaOfUser(userId.Value) : null;
     Arena? joinedArena = null;
+    string? joinedArenaColor = null;
+    var arenas = ArenaService.GetArenas().Result;
+    var arenaColors = ColorUtil.GetRainbowColors(arenas.Count());
     if (userArenaMembership != null)
     {
         joinedArena = await ArenaService.GetArenaById(userArenaMembership.ArenaId);
+        joinedArenaColor = arenaColors[arenas.ToList().IndexOf(joinedArena)];
     }
-
-    var arenas = ArenaService.GetArenas().Result;
 }
 
 
 <div class="joined-arena-section">
     @if (userArenaMembership != null && joinedArena != null)
     {
+        <p>Your arena:</p>
         <div class="arena-item">
-            <a asp-action="View" asp-route-id="@userArenaMembership.ArenaId">
-                <p>arena.Name</p>
-            </a>
+            <partial name="Partials/_ArenaButton" model='new ArenaButtonModel { ArenaId = joinedArena.Id, ArenaName = joinedArena.Name, BackgroundColor = joinedArenaColor }'/>
         </div>
     }
     else
@@ -33,14 +35,13 @@
 </div>
 
 <div class="arena-list">
-    @foreach (var arena in arenas)
+    @for (int i = 0; i < arenas.Count(); i++)
     {
+        var arena = arenas.ElementAt(i);
         if (userArenaMembership == null || userArenaMembership.ArenaId != arena.Id)
         {
             <div class="arena-item">
-                <a asp-action="View" asp-route-id="@arena.Id">
-                    <p>@arena.Name</p>
-                </a>
+                <partial name="Partials/_ArenaButton" model='new ArenaButtonModel { ArenaId = arena.Id, ArenaName = arena.Name, BackgroundColor = arenaColors[i] }'/>
             </div>
         }
     }
@@ -54,8 +55,16 @@
     .joined-arena-section {
         margin-bottom: 2rem;
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        
+        align-items: center;
         padding: 1rem;
+    }
+    
+    .arena-list {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
     }
 </style>
