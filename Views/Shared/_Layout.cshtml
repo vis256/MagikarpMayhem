@@ -27,7 +27,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
-                            <partial name="Partials/_NavButton" model='new NavButtonModel { Controller = "User", Action = "Profile", Method = "get", ButtonText = "Profile" }'/>
+                            <partial name="Partials/_NavButton" model='new NavButtonModel { Controller = "User", Action = "Me", Method = "get", ButtonText = "Profile" }'/>
                         </li>
                         <li class="nav-item">
                             <partial name="Partials/_NavButton" model='new NavButtonModel { Controller = "User", Action = "Logout", Method = "post", ButtonText = "Logout" }'/>

@@ -8,6 +8,16 @@
 
 <h1>@Model.Name</h1>
 
+<div>
+    <h2>Members</h2>
+    <ul>
+        @foreach (var user in await ArenaService.GetUsersOfArena(Model.Id))
+        {
+            <li><a asp-controller="User" asp-action="Profile" asp-route-id="@user.Id">@user.DisplayName</a></li>
+        }
+    </ul>
+</div>
+
 <div class="button-list">
     <form asp-action="Leave" asp-route-id="@Model.Id" method="post">
         <button type="submit">Leave Arena</button>

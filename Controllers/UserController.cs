@@ -22,7 +22,7 @@ public class UserController : Controller
         _context = context;
         _authService = authService;
     }
-    
+
     // GET /User/Index
     [Authorize(Roles = "Professor")]
     public IActionResult Index()
@@ -30,27 +30,39 @@ public class UserController : Controller
         var users = _context.User.ToList();
         return View(users);
     }
-    
-    // GET /User/Profile
+
+    // GET /User/Me
     [Authorize]
-    public IActionResult Profile()
+    public IActionResult Me()
     {
         var username = User.Identity?.Name;
-        
         if (username == null)
         {
             return RedirectToAction("NotLoggedIn");
         }
-        
+
         var user = _context.User.FirstOrDefault(u => u.Username == username);
-        
         if (user == null)
         {
             return RedirectToAction("NotLoggedIn");
         }
+
+        return View("Profile", user);
+    }
+
+    // GET /User/Profile/{idx}
+    [Authorize]
+    public IActionResult Profile(int idx)
+    {
+        var user = _context.User.Find(idx);
+        if (user == null)
+        {
+            return NotFound();
+        }
+
         return View(user);
     }
-    
+
     // GET /User/Login
     [NotLoggedIn]
     public IActionResult Login()
@@ -81,8 +93,10 @@ public class UserController : Controller
             {
                 return View(userData);
             }
+
             return RedirectToAction(nameof(Login));
         }
+
         return View(userData);
     }
 
@@ -100,22 +114,21 @@ public class UserController : Controller
     {
         return View();
     }
-    
-    
+
     // GET User/NotLoggedIn
     [NotLoggedIn]
     public IActionResult NotLoggedIn()
     {
         return View();
     }
-    
+
     // GET User/AccessDenied
     [AllowAnonymous]
     public IActionResult AccessDenied()
     {
         return View();
     }
-    
+
     // GET /User/Edit/{id}
     [Authorize(Roles = "Professor")]
     public IActionResult Edit(int id)
@@ -125,6 +138,7 @@ public class UserController : Controller
         {
             return NotFound();
         }
+
         return View(user);
     }
 
@@ -146,7 +160,6 @@ public class UserController : Controller
                 // Stuff we can't update
                 updatedUser.PasswordHash = existingUser.PasswordHash;
                 updatedUser.PasswordSalt = existingUser.PasswordSalt;
-                
                 _context.Update(updatedUser);
                 await _context.SaveChangesAsync();
             }
@@ -160,22 +173,24 @@ public class UserController : Controller
 
             throw;
         }
+
         return RedirectToAction(nameof(Index));
     }
-    
+
     // GET /User/ForgotPassword
     [NotLoggedIn]
     public IActionResult ForgotPassword()
     {
         return View();
     }
-    
+
     // POST /User/ForgotPassword
     [HttpPost]
     [NotLoggedIn]
     public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
     {
-        var user = await _context.User.FirstOrDefaultAsync(u => u.Username == model.Username);        if (user == null)
+        var user = await _context.User.FirstOrDefaultAsync(u => u.Username == model.Username);
+        if (user == null)
         {
             ModelState.AddModelError(string.Empty, "Username not found.");
             return View();
@@ -183,10 +198,9 @@ public class UserController : Controller
 
         // Generate password reset token and send email (implementation depends on your email service)
         await _authService.SendPasswordResetEmail(user);
-
         return RedirectToAction(nameof(Login));
     }
-    
+
     // GET /User/ResetPassword/{userId}/{token}
     [NotLoggedIn]
     public async Task<IActionResult> ResetPassword(int userId, string token)
@@ -195,24 +209,27 @@ public class UserController : Controller
         {
             return RedirectToAction("NotLoggedIn");
         }
-        
+
         return View();
     }
-    
+
     // POST /User/ResetPassword/{userId}/{token}
     [HttpPost]
     [NotLoggedIn]
-    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)    {
-        if (!await _authService.ValidatePasswordResetToken(model.UserId, model.Token))        {
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+    {
+        if (!await _authService.ValidatePasswordResetToken(model.UserId, model.Token))
+        {
             return RedirectToAction("NotLoggedIn");
         }
-        
-        if (model.Password != model.ConfirmPassword)        {
+
+        if (model.Password != model.ConfirmPassword)
+        {
             ModelState.AddModelError(string.Empty, "Passwords do not match.");
             return View();
         }
-        
-        await _authService.ResetPassword(model.UserId, model.Token, model.Password);        
+
+        await _authService.ResetPassword(model.UserId, model.Token, model.Password);
         return RedirectToAction(nameof(Login));
     }
 }

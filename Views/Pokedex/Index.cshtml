@@ -6,10 +6,34 @@
 
 <h1>Pokedex Index</h1>
 
+<div>
+    <input type="text" id="searchBar" placeholder="Search..." onkeyup="filterEntries()" style="margin-bottom: 1rem;">
+</div>
+
 <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem; justify-content: center;">
     @foreach (var entry in Model)
     {
     <partial name="Partials/_PokedexEntry" model="entry"/>
     }
 </div>
+
+<script>
+    function filterEntries() {
+        var input, filter, entries, entry, i, txtValue, txtElement;
+        input = document.getElementById('searchBar');
+        filter = input.value.toLowerCase();
+        entries = document.querySelectorAll('div.pokedex-entry');
+
+        for (i = 0; i < entries.length; i++) {
+            entry = entries[i];
+            txtElement = entry.querySelector('h1.name');
+            txtValue = txtElement.textContent || txtElement.innerText;
+            if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                entry.style.display = "";
+            } else {
+                entry.style.display = "none";
+            }
+        }
+    }
+</script>
 

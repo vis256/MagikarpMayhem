@@ -9,9 +9,12 @@ namespace MagikarpMayhem.Controllers;
 public class PokemonController : Controller
 {
     private readonly PokemonService PokemonService;
-    public PokemonController(PokemonService pokemonService)
+    private readonly PokedexService PokedexService;
+    
+    public PokemonController(PokemonService pokemonService, PokedexService pokedexService)
     {
         PokemonService = pokemonService;
+        PokedexService = pokedexService;
     }
     
     // GET
@@ -28,7 +31,7 @@ public class PokemonController : Controller
         return View(pokemons);
     }
     
-    // GET /Pokemon/User/5
+    // GET /Pokemon/UserPokemons/5
     [Authorize]
     public IActionResult UserPokemons(int id)
     {
@@ -39,7 +42,14 @@ public class PokemonController : Controller
     [Authorize]
     public IActionResult Create()
     {
-        return View();
+        var userId = User.Identity.IsAuthenticated ? int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) : (int?)null;
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+        var pokemon = new Pokemon { OwnerId = userId.Value };
+        ViewBag.PokedexEntries = PokedexService.GetAllPokedexInfos();
+        return View(pokemon);
     }
 
     // POST /Pokemon/Create
@@ -47,6 +57,13 @@ public class PokemonController : Controller
     [HttpPost]
     public IActionResult Create(Pokemon pokemon)
     {
+        var userId = User.Identity.IsAuthenticated ? int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) : (int?)null;
+        if (userId == null)
+        {
+            return Unauthorized();
+        }
+        pokemon.OwnerId = userId.Value;
+        
         if (ModelState.IsValid)
         {
             PokemonService.AddPokemon(pokemon);

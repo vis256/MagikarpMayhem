@@ -61,7 +61,7 @@ public class AuthService
         {
             IsPersistent = true,
             ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60),
-            RedirectUri = "/User/Profile"
+            RedirectUri = "/User/Me"
         };
 
         await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);

@@ -13,7 +13,7 @@ public class PokedexController : Controller
         PokedexService = pokedexService;
     }
     // GET
-    [Authorize]
+    [AllowAnonymous]
     public IActionResult Index()
     {
         var pokedexEntries = PokedexService.GetAllPokedexInfos();
