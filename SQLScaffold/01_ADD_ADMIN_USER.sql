@@ -1,0 +1,1 @@
+INSERT INTO User VALUES(0, 'admin', 'y6AEWitJtwSjq80Mlgxh9g==', 1, '42SviIww4sUoZZ66tUJw0oVH4Ev/6gyzAIKPoyg0jpk=', 'Professor Oak');
