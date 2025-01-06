@@ -52,9 +52,9 @@ public class UserController : Controller
 
     // GET /User/Profile/{idx}
     [Authorize]
-    public IActionResult Profile(int idx)
+    public IActionResult Profile(int id)
     {
-        var user = _context.User.Find(idx);
+        var user = _context.User.FirstOrDefault(u => u.Id == id);
         if (user == null)
         {
             return NotFound();
