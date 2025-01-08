@@ -160,6 +160,8 @@ public class UserController : Controller
                 // Stuff we can't update
                 updatedUser.PasswordHash = existingUser.PasswordHash;
                 updatedUser.PasswordSalt = existingUser.PasswordSalt;
+                updatedUser.DisplayName = existingUser.DisplayName;
+                updatedUser.Username = existingUser.Username;
                 _context.Update(updatedUser);
                 await _context.SaveChangesAsync();
             }
